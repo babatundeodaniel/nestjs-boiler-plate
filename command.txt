@@ -1,0 +1,22 @@
+install typeorm globally
+$ npm i -g typeorm
+
+generate your migrationfile from your already created schemas
+$ npm run typeorm migration:generate -- -n migrationNameHere
+
+run migration
+$ npm run migration
+$ npm run typeorm migration:run
+
+@CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;

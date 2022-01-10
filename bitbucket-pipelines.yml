@@ -1,0 +1,31 @@
+pipelines:
+  default:
+    - step:
+        name: Test
+        image: node:12
+        script:
+          - npm install
+          - npm test
+ 
+    - step:
+        name: Build
+        script:
+          - export IMAGE_NAME=$DOCKER_HUB_USERNAME/$APPLICATION_NAME:$BITBUCKET_COMMIT
+          # build the Docker image (this will use the Dockerfile in the root of the repo)
+          - docker build -t $IMAGE_NAME .
+          # authenticate with the Docker Hub registry
+          - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+          # push the new Docker image to the Docker registry
+          - docker push $IMAGE_NAME
+        services:
+          - docker
+    - step:
+        name: Deploy
+        deployment: production
+        script:
+          - sed -i "s|{{image}}|$DOCKER_HUB_USERNAME/$APPLICATION_NAME:$BITBUCKET_COMMIT|g" deployment.yml
+          - pipe: atlassian/kubectl-run:1.1.2
+            variables:
+              KUBE_CONFIG: $KUBE_CONFIG
+              KUBECTL_COMMAND: 'apply'
+              RESOURCE_PATH: 'deployment.yml'

@@ -24,13 +24,19 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript boilerplate repository.
 
 ## Installation
 
 ```bash
 $ npm install
 ```
+## Configuration
+
+The a sample env: development.env.example is included in the repository. 
+copy development.env.example to development.env
+Change values as appropraite.
+TO add move fields to the env, create field by including the field in EnvData interface found in the src/commom/env.service.ts
 
 ## Running the app
 
@@ -57,6 +63,8 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Included Packages
 
 ## Support
 

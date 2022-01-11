@@ -10,12 +10,16 @@ import { ModelExceptionFilter } from './common/Exception-Filters/model-exception
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TestModule } from './test/test.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ClientsModule.register([
+      { name: 'MATH_SERVICE', transport: Transport.RMQ },
+    ]),
     RouterModule.forRoutes(routes),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(connectionOptions),

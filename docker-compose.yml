@@ -5,6 +5,8 @@ services:
       context: .
     ports: 
       - 3000:3000
+    networks:
+      - nesjs-network
     env_file:
       - .env
     volumes: 
@@ -12,12 +14,14 @@ services:
       - /usr/src/app/node_modules
     depends_on: 
       - db
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
     
   db:
     image: mysql:5.7.22
     restart: always
     environment: 
-      MYSQL_DATABASE: 'splitpay'
+      MYSQL_DATABASE: 'test_db'
       MYSQL_USER: 'root'
       MYSQL_PASSWORD: 'IaaBoy234'
       MYSQL_ROOT_PASSWORD: 'Abracadabra@1234'
@@ -28,4 +32,21 @@ services:
       - .env
     ports: 
       - 3316:3306
-
+    networks:
+          - nesjs-network
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./phpmyadmin.inc.php:/etc/phpmyadmin/config.user.inc.php
+    environment:
+      - PMA_ARBITRARY=1
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+networks:
+    nesjs-network: 
+    

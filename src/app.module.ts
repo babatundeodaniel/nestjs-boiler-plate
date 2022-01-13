@@ -11,14 +11,24 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TestModule } from './test/test.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TracingModule } from '@dollarsign/nestjs-jaeger-tracing';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TracingModule.forRoot({
+      exporterConfig: {
+        serviceName: 'core-service', // service name that will be shown in jaeger dashboard
+      },
+      isSimpleSpanProcessor: true, // true for development.
+    }),
     ClientsModule.register([
-      { name: 'MATH_SERVICE', transport: Transport.RMQ },
+      { name: 'MATH_SERVICE', transport: Transport.RMQ, 
+      options: { 
+        ...TracingModule.getParserOptions(), // this method will return serializer that inject tracing id to microservice payload.
+      } },
     ]),
     RouterModule.forRoutes(routes),
     ScheduleModule.forRoot(),

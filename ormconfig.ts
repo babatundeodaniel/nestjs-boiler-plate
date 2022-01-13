@@ -21,4 +21,5 @@ const connectionOptions: ConnectionOptions = {
     migrationsDir: 'src/migrations',
   },
 };
+
 export = connectionOptions;

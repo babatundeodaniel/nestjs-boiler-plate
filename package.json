@@ -1,10 +1,10 @@
 {
-  "name": "splitmulti-marketplace",
+  "name": "nestjs-boiler-plate",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "A quick start for your nestjs project.",
+  "author": "Daniel Babatunde",
   "private": true,
-  "license": "ClarkCoulson",
+  "license": "GPL",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -26,6 +26,7 @@
     "migration:revert": "yarn typeorm migration:revert"
   },
   "dependencies": {
+    "@dollarsign/nestjs-jaeger-tracing": "^1.0.8",
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.6.15",

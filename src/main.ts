@@ -11,14 +11,14 @@ async function bootstrap() {
   const env = new EnvService().read();
   const app = await NestFactory.create(AppModule);
   // Then combine it with a RabbitMQ microservice
-  const microservice = app.connectMicroservice({
+  /* const microservice = app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
       urls: [`${env.RMQ_URL}`],
       queue: `${env.RMQ_QUEUE}`,
       queueOptions: { durable: false },
     },
-  });
+  }); */
 
   
   app.useGlobalPipes(new ValidationPipe());
@@ -36,7 +36,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   // Start microservice
-  await app.startAllMicroservicesAsync();
+  //await app.startAllMicroservicesAsync();
 
   // Start HTTP request - response
   await app.listen(env.APP_PORT);

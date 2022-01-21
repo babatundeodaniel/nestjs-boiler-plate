@@ -24,12 +24,12 @@ import { TracingModule } from '@dollarsign/nestjs-jaeger-tracing';
       },
       isSimpleSpanProcessor: true, // true for development.
     }),
-    ClientsModule.register([
+    /* ClientsModule.register([
       { name: 'MATH_SERVICE', transport: Transport.RMQ, 
       options: { 
         ...TracingModule.getParserOptions(), // this method will return serializer that inject tracing id to microservice payload.
       } },
-    ]),
+    ]), */
     RouterModule.forRoutes(routes),
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot(connectionOptions),

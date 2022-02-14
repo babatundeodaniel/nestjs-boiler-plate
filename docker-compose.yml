@@ -1,39 +1,39 @@
 version: '3.7'
-services: 
-  backend: 
-    build: 
+services:
+  backend:
+    build:
       context: .
-    ports: 
+    ports:
       - 3000:3000
     networks:
       - nesjs-network
     env_file:
       - .env
-    volumes: 
+    volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    depends_on: 
+    depends_on:
       - db
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
-    
+
   db:
     image: mysql:5.7.22
     restart: always
-    environment: 
+    environment:
       MYSQL_DATABASE: 'test_db'
       MYSQL_USER: 'root'
       MYSQL_PASSWORD: 'IaaBoy234'
       MYSQL_ROOT_PASSWORD: 'Abracadabra@1234'
       BASE_URL: ''
-    volumes: 
+    volumes:
       - .dbdata:/var/lib/mysql
     env_file:
       - .env
-    ports: 
+    ports:
       - 3316:3306
     networks:
-          - nesjs-network
+      - nesjs-network
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
   phpmyadmin:
@@ -47,6 +47,36 @@ services:
       - PMA_ARBITRARY=1
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
+  storage:
+    image: ghcr.io/openzipkin/zipkin-cassandra:${TAG:-latest}
+    # Uncomment to use DSE instead (minimum version 5.1)
+    # image: datastax/dse-server:5.1.20
+    # environment:
+    #  - DS_LICENSE=accept
+    container_name: cassandra
+    # Uncomment to expose the storage port for testing
+    # ports:
+    #   - 9042:9042
+    # Use MySQL instead of in-memory storage
+  zipkin:
+    container_name: zipkin
+    image: ghcr.io/openzipkin/zipkin:${TAG:-latest}
+    environment:
+      - STORAGE_TYPE=cassandra3
+      # When using the test docker image, or have schema pre-installed, you don't need to ensure it
+      - CASSANDRA_ENSURE_SCHEMA=false
+      # When overriding this value, note the minimum supported version is 3.11.3
+      - CASSANDRA_CONTACT_POINTS=cassandra
+      # Uncomment to configure authentication
+      # - CASSANDRA_USERNAME=cassandra
+      # - CASSANDRA_PASSWORD=cassandra
+    ports:
+      # Port used for the Zipkin UI and HTTP Api
+      - 9411:9411
+    command: --logging.level.zipkin2=DEBUG
+    depends_on:
+      - storage
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
 networks:
-    nesjs-network: 
-    
+  nesjs-network:

@@ -36,7 +36,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   // Start microservice
-  //await app.startAllMicroservicesAsync();
+  //const app_url = await app.startAllMicroservicesAsync();
 
   // Start HTTP request - response
   await app.listen(env.APP_PORT);

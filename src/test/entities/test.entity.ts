@@ -8,4 +8,10 @@ export class Test {
 
     @Column()
     name: string;
+
+    @Column()
+    createdAt: string;
+
+    @Column()
+    updatedAt: string;
 }

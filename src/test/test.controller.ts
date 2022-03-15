@@ -50,6 +50,6 @@ export class TestController extends BaseController {
   notification(@Payload() data: number[], @Ctx() context){
     // const { properties: { headers } } = context.getMessage();
     console.log(`Pattern: ${context.getPattern()}`);
-    return data.length === 1 ? '🐱' : '🐈';
+    return data.length === 1 ? '🐱 or goat' : '🐈 and mouse';
   }
 }

@@ -11,14 +11,14 @@ async function bootstrap() {
   const env = new EnvService().read();
   const app = await NestFactory.create(AppModule);
   // Then combine it with a RabbitMQ microservice
-  /* const microservice = app.connectMicroservice({
+  const microservice = app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
       urls: [`${env.RMQ_URL}`],
       queue: `${env.RMQ_QUEUE}`,
       queueOptions: { durable: false },
     },
-  }); */
+  });
   /* const microservice = app.connectMicroservice({
     transport: Transport.NATS,
     options: {
@@ -32,7 +32,7 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter(), new ModelExceptionFilter());
 
-  const config = new DocumentBuilder()
+  /* const config = new DocumentBuilder()
     .setTitle(env.APP_NAME || 'Quick NestJs Boilerplate for REST Service')
     .setDescription(env.APP_DESC || 'The Quickproject')
     .setVersion(env.APP_VER || '1.0')
@@ -40,16 +40,21 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document); */
 
   // Start microservice
-  // const app_url = await app.startAllMicroservices();
+  app.startAllMicroservices().then(() => {
+    console.log('Microservice started');
+    
+  });
+  // console.log('app_url', app_url.getMicroservices());
+  
 
   // Start HTTP request - response
-  await app.listen(env.APP_PORT);
-  const app_url = await app.getUrl();
+  /* await app.listen(env.APP_PORT);
+  const app_url = await app.getUrl(); */
   
-  console.log(`Application is running on: ${app_url}`);
-  console.log(`Swagger Docs path: ${app_url}/api`);
+  /* console.log(`Application is running on: ${app_url}`);
+  console.log(`Swagger Docs path: ${app_url}/api`); */
 }
 bootstrap();

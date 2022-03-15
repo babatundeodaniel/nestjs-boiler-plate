@@ -28,9 +28,15 @@ export class TestController extends BaseController {
     return this.responseSuccess(res, '00', 'Success', test, HttpStatus.OK);
   } */
 
+  /**
+   * Example of calling the service that would send message to the microservice
+   * @param id 
+   * @param res 
+   * @returns 
+   */
   @Get(':id')
-  findOne(@Param('id') id: string, @Res({ passthrough: true }) res: Response) {
-    const test = this.testService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res({ passthrough: true }) res: Response) {
+    const test = await this.testService.accumulate('notifications');
     return this.responseSuccess(res, '00', 'Success', test, HttpStatus.OK);
   }
 
